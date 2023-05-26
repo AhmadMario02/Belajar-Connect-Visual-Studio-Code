@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Tugas API</title>
+</head>
+<body style="background-image: url('https://getwallpapers.com/wallpaper/full/9/3/c/252650.jpg');">
+    <div class="container">
+        <h1>Daftar Pesantren</h1>
+        <p>Silahkan pilih provinsi : <select id="province" class="form-select" aria-label="Default select example">
+            <option selected>Pilih provinsi</option>
+        </select></p>
+
+        <p>Silahkan pilih kota / kabupaten : <select id="kab" class="form-select" aria-label="Default select example">
+            <option selected>Pilih kota / kabupaten</option>
+        </select></p>
+
+        <p>Daftar Pesantren : <select id="listpesantren" class="form-select" aria-label="Default select example">
+            <option selected>Pilih pesantren</option>
+        </select></p>
+    </div>
+    <!-- <div class="container" id="cardpesantren">
+    
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" id="cardnama">Nama Pesantren</h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary" id="cardalamat">Alamat</h6>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+        </div>
+    </div> -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var baseURL = "https://api-pesantren-indonesia.vercel.app/"
+            var prov = "provinsi.json"
+            
+            $.get(baseURL+prov, function(data, status){
+                for(i=0;i<data.length;i++){
+                    var menu = "<option value =" + data[i].id + ">" + data[i].nama + "</option>"
+                    $('#province').append(menu)
+                }
+            })
+
+            $("#province").change(function(){
+                var idprov = $('#province').val();
+                var kab = "kabupaten/" + idprov + ".json"
+                $('#kab').empty()
+
+                $.get(baseURL+kab, function(data, status){
+                for(i=0;i<data.length;i++){
+                    var menu = "<option value =" + data[i].id + ">" + data[i].nama + "</option>"
+                    $('#kab').append(menu)
+                }
+                })
+            })
+
+            $('#kab').change(function(){
+                var idkab = $('#kab').val();
+                var pes = "pesantren/" + idkab + ".json"
+                $('#listpesantren').empty()
+
+                $.get(baseURL+pes, function(data, status){
+                    console.log(data)
+                    for(i=0;i<data.length;i++){
+                        var menu = "<option value =" + data[i].id + ">" + (i+1) + ". " + data[i].nama + "</option>"
+                        $('#listpesantren').append(menu)
+                    }
+                })
+            })
+
+            $('#listpesantren').change(function() {
+
+                // var idkab = $('#kab').val();
+                // var pes = "pesantren/" + idkab + ".json"
+                // $.get(baseURL+pes, function(data, status){
+                    
+                // })                
+            })
+        })
+    </script>
+</body>
+</html>
